@@ -1,0 +1,47 @@
+name: Build executables
+
+on:
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        pip install pyqt6 requests pyinstaller
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --onefile --windowed --name AutoVPN3-GUI main.py
+    - uses: actions/upload-artifact@v4
+      with:
+        name: AutoVPN3-GUI-linux
+        path: dist/AutoVPN3-GUI
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+    - name: Install dependencies
+      run: |
+        pip install pyqt6 requests pyinstaller
+    - name: Build with PyInstaller
+      run: |
+        pyinstaller --onefile --windowed --name AutoVPN3-GUI.exe main.py
+    - uses: actions/upload-artifact@v4
+      with:
+        name: AutoVPN3-GUI-windows
+        path: dist/AutoVPN3-GUI.exe
