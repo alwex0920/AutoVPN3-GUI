@@ -1,4 +1,4 @@
-name: Build executables
+name: Build executables and release
 
 on:
   push:
@@ -45,3 +45,26 @@ jobs:
       with:
         name: AutoVPN3-GUI-windows
         path: dist/AutoVPN3-GUI.exe
+
+  release:
+    needs: [build-linux, build-windows]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - name: Download Linux artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AutoVPN3-GUI-linux
+          path: linux
+      - name: Download Windows artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AutoVPN3-GUI-windows
+          path: windows
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            linux/AutoVPN3-GUI
+            windows/AutoVPN3-GUI.exe
+          generate_release_notes: true
