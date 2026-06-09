@@ -32,3 +32,5 @@ This version adds a full GUI, proxy support, server management, and cross-platfo
 
 ## License
 MIT
+
+> **Note:** Code comments are written in Russian.
