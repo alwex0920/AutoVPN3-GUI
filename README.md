@@ -34,3 +34,11 @@ This version adds a full GUI, proxy support, server management, and cross-platfo
 MIT
 
 > **Note:** Code comments are written in Russian.
+
+## v1.0.1 - Fix authentication for OpenVPN connections
+
+- Create temporary .auth file with credentials instead of inline auth-user-pass
+- Add proper cleanup of .auth file on disconnect
+- Add support for custom protocol (tcp/udp) and port
+- Fix disconnect button RuntimeError
+- Improve error handling and logging
