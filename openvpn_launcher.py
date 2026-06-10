@@ -30,7 +30,10 @@ class OpenVPNLauncher:
             return None
 
         if self.username and self.password:
-            config_data += f"\nauth-user-pass\n{self.username}\n{self.password}\n"
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.auth', delete=False) as f:
+                f.write(f"{self.username}\n{self.password}\n")
+                self.auth_path = f.name
+            config_data += f"\nauth-user-pass {self.auth_path}\n"
             print("[OpenVPNLauncher] Добавлены данные авторизации.")
 
         try:
@@ -72,3 +75,5 @@ class OpenVPNLauncher:
             if self.config_path and os.path.exists(self.config_path):
                 os.unlink(self.config_path)
                 print(f"[OpenVPNLauncher] Удалён временный файл: {self.config_path}")
+            if self.auth_path and os.path.exists(self.auth_path):
+                os.unlink(self.auth_path)
