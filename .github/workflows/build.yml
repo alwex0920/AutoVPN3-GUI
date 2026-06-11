@@ -24,7 +24,14 @@ jobs:
         pip install pyqt6 requests pyinstaller
     - name: Build with PyInstaller
       run: |
-        pyinstaller --onefile --windowed --name AutoVPN3-GUI main.py
+        pyinstaller --onefile --windowed \
+          --name AutoVPN3-GUI \
+          --hidden-import PyQt6.QtCore \
+          --hidden-import PyQt6.QtWidgets \
+          --hidden-import PyQt6.QtGui \
+          --collect-all PyQt6 \
+          --add-data "$(python -c 'import PyQt6, os; print(os.path.dirname(PyQt6.__file__))')/Qt6/plugins:Qt6/plugins" \
+          main.py
     - uses: actions/upload-artifact@v4
       with:
         name: AutoVPN3-GUI-linux
